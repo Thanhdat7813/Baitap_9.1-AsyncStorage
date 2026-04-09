@@ -1,13 +1,38 @@
 import React,{useState,useContext} from "react";
-import {View,Text,TextInput,TouchableOpacity,StyleSheet} from "react-native";
-import {AuthContext} from "../context/AuthContext";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {AppContext} from "../App";
 
 export default function LoginScreen(){
 
-  const {login} = useContext(AuthContext)
+  const {setUser} = useContext(AppContext);
 
-  const [email,setEmail] = useState("")
-  const [password,setPassword] = useState("")
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
+
+  const handleLogin = async ()=>{
+
+    if(email==="admin@gmail.com" && password==="123456"){
+
+      const user = {
+        name:"Thanh Dat",
+        job:"Mobile developer"
+      };
+
+      await AsyncStorage.setItem("user", JSON.stringify(user));
+
+      setUser(user);
+
+    }else{
+      alert("Sai tài khoản hoặc mật khẩu");
+    }
+  }
 
   return(
 
@@ -32,7 +57,7 @@ export default function LoginScreen(){
 
       <TouchableOpacity
         style={styles.button}
-        onPress={()=>login(email,password)}
+        onPress={handleLogin}
       >
         <Text style={{color:"#fff"}}>Sign In</Text>
       </TouchableOpacity>
@@ -108,4 +133,4 @@ facebook:{
  alignItems:"center"
 }
 
-})
+});

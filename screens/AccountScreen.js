@@ -1,10 +1,16 @@
 import React,{useContext} from "react";
 import {View,Text,TouchableOpacity,StyleSheet} from "react-native";
-import {AuthContext} from "../context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {AppContext} from "../App";
 
 export default function AccountScreen(){
 
-  const {user,logout} = useContext(AuthContext)
+  const {user,setUser} = useContext(AppContext);
+
+  const handleLogout = async ()=>{
+    await AsyncStorage.removeItem("user");
+    setUser(null);
+  }
 
   return(
     <View style={styles.container}>
@@ -15,9 +21,9 @@ export default function AccountScreen(){
       {/* INFO */}
       <View style={styles.info}>
 
-        <Text style={styles.name}>{user.name}</Text>
+        <Text style={styles.name}>{user?.name}</Text>
 
-        <Text style={styles.job}>{user.job}</Text>
+        <Text style={styles.job}>{user?.job}</Text>
 
         {/* DÒNG CHỮ THÊM BÊN DƯỚI */}
         <Text style={styles.subJob}>React Native developer</Text>
@@ -32,7 +38,7 @@ export default function AccountScreen(){
         {/* SIGN OUT */}
         <TouchableOpacity
           style={styles.button}
-          onPress={logout}
+          onPress={handleLogout}
         >
           <Text style={styles.buttonText}>Sign Out</Text>
         </TouchableOpacity>
